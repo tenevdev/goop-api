@@ -1,0 +1,1 @@
+web: node dist/0.0.1/app.js
