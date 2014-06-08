@@ -27,7 +27,7 @@ var config = {
       name: 'goop'
     },
     port: 3000,
-    db: 'mongodb://localhost/goop-production'
+    db: 'mongodb://heroku_app26159087:4o635kch5gsb4bnj0r3dj4qs3g@ds043348.mongolab.com:43348/heroku_app26159087'
   }
 };
 
