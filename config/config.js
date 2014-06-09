@@ -1,6 +1,7 @@
 var path = require('path'),
   rootPath = path.normalize(__dirname + '/..'),
-  env = process.env.NODE_ENV || 'development';
+  env = process.env.NODE_ENV || 'development',
+  productionDbPath = process.env.MONGOLAB_URI || 'mongodb://localhost/goop-production';
 
 var config = {
   development: {
@@ -27,7 +28,7 @@ var config = {
       name: 'goop'
     },
     port: 3000,
-    db: 'mongodb://localhost/goop-production'
+    db: productionDbPath
   }
 };
 
