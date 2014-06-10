@@ -5,7 +5,7 @@ module.exports = function(app) {
 
   // Views router
 
-  var home = require('../app/controllers/home');
+  var home = require('../app/controllers/web/home');
   router.route('/').get(home.index);
 
   app.use('/', router);

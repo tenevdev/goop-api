@@ -3,8 +3,8 @@ module.exports = function(app, passport) {
   var apiVersion = 1,
     router = require('express').Router(),
     apiPath = '/api/v' + apiVersion,
-    classes = require('../app/controllers/classes'),
-    users = require('../app/controllers/users'),
+    classes = require('../app/controllers/api/classes'),
+    users = require('../app/controllers/api/users'),
     authorize = require('./routes_middleware/authorize');
 
   // Auth
