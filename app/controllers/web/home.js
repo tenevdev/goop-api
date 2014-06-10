@@ -1,12 +1,7 @@
-var mongoose = require('mongoose'),
-  Article = mongoose.model('Article');
+var mongoose = require('mongoose');
 
 exports.index = function(req, res) {
-  Article.find(function(err, articles) {
-    if (err) throw new Error(err);
-    res.render('home/index', {
-      title: 'Goop Web API',
-      articles: articles
-    });
+  res.render('home/index', {
+    title: 'Goop Web API'
   });
 };
