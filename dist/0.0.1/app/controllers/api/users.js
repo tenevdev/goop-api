@@ -31,8 +31,16 @@ function getClassFilterFromQuery(queryObject) {
 
 // GET
 
-// Load the user with the given id into the request
-// Used when a userId parameter is passed to the url
+/**
+ * Load the user with the given id into the request
+ * Used when a userId parameter is passed to the url
+ *
+ * @method load
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ * @param {String} id - User id
+ */
 exports.load = function(req, res, next, id) {
   if (req.method !== 'PUT') {
     User.getById(id, function(err, data) {
@@ -47,14 +55,20 @@ exports.load = function(req, res, next, id) {
         next(new Error('Resource not found'));
       }
     });
-  }
-  else{
+  } else {
     next();
   }
 };
 
-// Send the user as a response
-// Runs after a load which injects the user into the request
+/**
+ * Send the user as a response
+ * Runs after a load which injects the user into the request
+ *
+ * @method getById
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.getById = function(req, res, next) {
   if (req.user) {
     res.json(200, req.user);
@@ -62,7 +76,14 @@ exports.getById = function(req, res, next) {
   }
 };
 
-// Get all users (maybe should be limited)
+/**
+ * Get all users
+ *
+ * @method getAll
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.getAll = function(req, res, next) {
   // Options object to pass to the model
   var options = {
@@ -91,8 +112,15 @@ exports.getAll = function(req, res, next) {
   });
 };
 
-// Get classes for a user
-// Runs after a load which injects the user into the request
+/**
+ * Get classes for a user
+ * Runs after a load which injects the user into the request
+ *
+ * @method getClasses
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.getClasses = function(req, res, next) {
   var options = {
     filter: {},
@@ -121,10 +149,18 @@ exports.getClasses = function(req, res, next) {
 
 // POST
 
-// Create a new user from the request
-// The request is coming from the client and nothing is injected
+/**
+ * Create a new user from the request
+ * The request is coming from the client and nothing is injected
+ *
+ * @method post
+ * @param {Object} req - Express request
+ * @param {Object} req.body.user - User object to be created
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.post = function(req, res, next) {
-  var userDoc = new User(req.body);
+  var userDoc = new User(req.body.user);
 
   userDoc.save(function(err, data) {
     if (err) {
@@ -141,11 +177,18 @@ exports.post = function(req, res, next) {
 
 // DELETE
 
-// Delete a user
-// Runs after a load which injects the user into the request
+/**
+ * Delete a user
+ * Runs after a load which injects the user into the request
+ *
+ * @method delete
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.delete = function(req, res, next) {
 
-  req.user.remove(function(err){
+  req.user.remove(function(err) {
     if (err) {
       res.json(500, err);
       next(err);
@@ -170,11 +213,20 @@ exports.delete = function(req, res, next) {
 
 };
 
-// Delete all classes for a given user
-// Runs after a load which injects the user into the request
+/**
+ * Delete all classes for a given user
+ * Runs after a load which injects the user into the request
+ *
+ * @method deleteClasses
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.deleteClasses = function(req, res, next) {
 
-  Class.find({author: req.user.id}).remove(function(err) {
+  Class.find({
+    author: req.user.id
+  }).remove(function(err) {
     if (err) {
       res.json(500, err);
       next(err);
@@ -189,10 +241,19 @@ exports.deleteClasses = function(req, res, next) {
 
 // PUT
 
-// Update a user (maybe should be limited)
-// The request is coming from the client and nothing is injected
+/**
+ * Update a user
+ * The request is coming from the client and nothing is injected
+ *
+ * @method update
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.update = function(req, res, next) {
-  User.findByIdAndUpdate(req.params.userId, req.body, {select: '-__v'}, function(err, data) {
+  User.findByIdAndUpdate(req.params.userId, req.body, {
+    select: '-__v'
+  }, function(err, data) {
     if (err) {
       res.json(500, err);
       next(err);

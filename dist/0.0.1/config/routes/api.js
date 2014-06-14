@@ -3,8 +3,8 @@ module.exports = function(app, passport) {
   var apiVersion = 1,
     router = require('express').Router(),
     apiPath = '/api/v' + apiVersion,
-    classes = require('../app/controllers/classes'),
-    users = require('../app/controllers/users'),
+    classes = require('../../app/controllers/api/classes'),
+    users = require('../../app/controllers/api/users'),
     authorize = require('./routes_middleware/authorize');
 
   // Auth
@@ -31,9 +31,9 @@ module.exports = function(app, passport) {
   router.param('classId', classes.load);
 
   router.route('/classes')
-    .get(classes.getAll)
-    .post(authorize.requiresLogin, classes.post)
-    .delete(authorize.user.isAuthorizedAdministrator, classes.deleteAll);
+  .get(classes.getAll)
+  .post(authorize.requiresLogin, classes.post)
+  .delete(authorize.user.isAuthorizedAdministrator, classes.deleteAll);
 
   router.route('/classes/:classId')
     .get(classes.getById)
@@ -60,7 +60,9 @@ module.exports = function(app, passport) {
 
   router.route('/users/:userId/classes')
     .get(users.getClasses)
-    .delete(passport.authenticate('local', {session: false}), authorize.user.isAuthorized, users.deleteClasses);
+    .delete(passport.authenticate('local', {
+      session: false
+    }), authorize.user.isAuthorized, users.deleteClasses);
 
   router.route('/users')
     .get(authorize.user.isAuthorizedAdministrator, users.getAll)

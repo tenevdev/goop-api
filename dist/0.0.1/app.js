@@ -46,8 +46,8 @@ var app = express();
 require('./config/express')(app, config, passport);
 
 // Configure routes
-require('./config/routes')(app);
-require('./config/api-routes')(app, passport);
+require('./config/routes/web')(app);
+require('./config/routes/api')(app, passport);
 
 // Handle not found on application level (maybe should go inside routes)
 app.use(function(req, res) {

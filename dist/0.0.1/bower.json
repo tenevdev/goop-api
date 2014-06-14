@@ -4,6 +4,9 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "components"
-  ]
+    "./public/components"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1"
+  }
 }

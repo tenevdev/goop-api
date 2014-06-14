@@ -1,7 +1,14 @@
 var mongoose = require('mongoose'),
   Class = mongoose.model('Class');
+
 // Helpers
 
+/**
+ * @method getFilterFromQuery
+ * @private
+ * @param {Object} queryObject - Usually a request query
+ * @return {Object} - A filter object
+ */
 function getFilterFromQuery(queryObject) {
   var filterCriteria = {};
   for (var key in queryObject) {
@@ -17,7 +24,19 @@ function getFilterFromQuery(queryObject) {
 
 // GET
 
-// Get all classes
+/**
+ * Get all classes.
+ *
+ * @method getAll
+ * @param {Request} req - Express request
+ * @param {Number} [req.query.limit=10] - The maximum number of classes to take
+ * @param {Number} [req.queryoffset=0] - The number of classes to skip before taking
+ * @param {String} [req.queryname] - Filter classes by name
+ * @param {String} [req.query.author] - Filter classes by author id
+ * @param {String} [req.query.inherits] - Filter classes by parent id
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.getAll = function(req, res, next) {
   var options = {
     filter: {},
@@ -36,7 +55,15 @@ exports.getAll = function(req, res, next) {
   });
 };
 
-// Get the class with the given id
+/**
+ * Get the class with the given id
+ *
+ * @method getById
+ * @param {Object} req - Express request
+ * @param {Object} req.class - The class to be returned
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.getById = function(req, res, next) {
   // Called after load
   if (req.class)
@@ -44,7 +71,15 @@ exports.getById = function(req, res, next) {
   next();
 };
 
-// Load the class with the given id into the request
+/**
+ * Load the class with the given id into the request
+ *
+ * @method load
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ * @param {Function} next
+ * @param {String} id - Class id
+ */
 exports.load = function(req, res, next, id) {
   //var User = mongoose.model('User');
 
@@ -66,10 +101,19 @@ exports.load = function(req, res, next, id) {
 
 // POST
 
+/**
+ * Create a new class
+ *
+ * @method post
+ * @param {Object} req - Express request
+ * @param {Object} req.body.class - The class to be created
+ * @param {Object} [req.body.user] - The user who creates this class
+ * @param {Object} res - Express response
+ */
 exports.post = function(req, res) {
-  var classDoc = new Class(req.body);
-  if(req.user)
-    classDoc.author = req.user.id;
+  var classDoc = new Class(req.body.class);
+  if (req.user)
+    classDoc.author = req.body.user.id;
 
   classDoc.save(function(err, data) {
     if (err) {
@@ -84,6 +128,13 @@ exports.post = function(req, res) {
 
 // DELETE
 
+/**
+ * Delete all classes
+ *
+ * @method deleteAll
+ * @param {Object} req - Express request
+ * @param {Object} res - Express response
+ */
 exports.deleteAll = function(req, res) {
   // Remove all classes
   Class.remove({}, function(err) {
@@ -96,8 +147,16 @@ exports.deleteAll = function(req, res) {
   });
 };
 
+/**
+ * Delete a class
+ *
+ * @method delete
+ * @param {Object} req - Express request
+ * @param {Object} req.class - The class to be deleted
+ * @param {Object} res - Express response
+ */
 exports.delete = function(req, res) {
-  
+
   req.class.remove(function(err) {
     if (err) {
       res.json(500, err);
@@ -121,8 +180,21 @@ exports.delete = function(req, res) {
 };
 
 // PUT
+
+/**
+ * Update a class
+ *
+ * @method update
+ * @param {Object} req - Express request
+ * @param {Object} req.body.class - The updated class object
+ * @param {Object} req.params.classId - The id of the class to be updated
+ * @param {Object} res - Express response
+ * @param {Function} next
+ */
 exports.update = function(req, res, next) {
-   Class.findByIdAndUpdate(req.params.classId, req.body.class, {select: '-__v'}, function(err, data) {
+  Class.findByIdAndUpdate(req.params.classId, req.body.class, {
+    select: '-__v'
+  }, function(err, data) {
     if (err) {
       res.json(500, err);
       next(err);
