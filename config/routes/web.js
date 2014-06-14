@@ -5,8 +5,10 @@ module.exports = function(app) {
 
   // Views router
 
-  var home = require('../app/controllers/web/home');
+  var home = require('../../app/controllers/web/home');
+  
   router.route('/').get(home.index);
+  router.route('/home').get(home.index);
 
   app.use('/', router);
 };
