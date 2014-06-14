@@ -5,10 +5,10 @@
   "homepage": "goop.herokuapp.com",
   "version": "0.0.1",
   "scripts": {
-    "start": "app.js"
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "dependencies": {
-    "bower": "^1.3.3",
+    "bower": "^1.3.5",
     "express": "^4.4.0",
     "jade": "~0.34.0",
     "mongoose": "~3.6.14",
@@ -35,8 +35,5 @@
     "grunt-contrib-jade": "^0.12.0",
     "grunt-shell": "^0.7.0",
     "grunt-contrib-yuidoc": "^0.5.2"
-  },
-  "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
