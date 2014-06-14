@@ -5,7 +5,9 @@ module.exports = function(grunt) {
 
     copy: {
       dist: {
-        src: ['public/**', 'app/**', 'config/**', 'app.js', '*.json', 'Procfile'],
+        src: ['public/**', 'app/**', 'config/**', 'app.js', '*.json',
+          'Procfile'
+        ],
         dest: 'dist/<%= pkg.version %>',
         expand: true
       }
@@ -50,12 +52,16 @@ module.exports = function(grunt) {
       options: {
         jshintrc: '.jshintrc'
       },
-      files: ['**/*.js', '!node_modules/**', '!dist/**']
+      files: ['**/*.js', '!node_modules/**', '!dist/**',
+        '!public/**'
+      ]
     },
 
     watch: {
       web: {
-        files: ['**/*.js', '!Gruntfile.js', '!node_modules/**', '!dist/**'],
+        files: ['**/*.js', '!Gruntfile.js', '!node_modules/**', '!dist/**',
+          '!public/**'
+        ],
         tasks: ['scripts', 'express:web'],
         options: {
           nospawn: true,
@@ -79,7 +85,7 @@ module.exports = function(grunt) {
         }
       },
       preview: {
-        options:{
+        options: {
           script: 'dist/<%= pkg.version %>/app.js'
         }
       }
@@ -107,8 +113,8 @@ module.exports = function(grunt) {
       'git-add-dist': {
         command: 'git add '
       },
-      'git-branch':{
-        command: function(branch){
+      'git-branch': {
+        command: function(branch) {
           var commands = [];
           commands.push('git checkout ' + branch);
           commands.push('git merge master');
@@ -116,11 +122,25 @@ module.exports = function(grunt) {
         }
       },
       'git-commit-build': {
-        command: function(commitMessage){
+        command: function(commitMessage) {
           return 'git commit -am"' + commitMessage + '"';
         }
       }
+    },
+
+    yuidoc: {
+    compile: {
+      name: '<%= pkg.name %>',
+      description: '<%= pkg.description %>',
+      version: '<%= pkg.version %>',
+      url: '<%= pkg.homepage %>',
+      options: {
+        paths: ['app/', 'config/'],
+        //themedir: 'path/to/custom/theme/',
+        outdir: 'public/docs/yui/'
+      }
     }
+  },
 
   });
 
@@ -133,6 +153,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-parallel');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   grunt.registerTask('web', 'Launch webserver and watch tasks', [
     'parallel:web'
@@ -145,10 +166,17 @@ module.exports = function(grunt) {
   grunt.registerTask('scripts', 'Uglify scripts and clean the directory', [
     'jshint'
   ]);
-  grunt.registerTask('preview', 'Launch web server from dist', ['express:preview']);
-  grunt.registerTask('staging', 'Staging...', ['build', 'shell:git-commit-build:<%= pkg.version %>']);
+  grunt.registerTask('preview', 'Launch web server from dist', [
+    'express:preview'
+  ]);
+  grunt.registerTask('staging', 'Staging...', ['build',
+    'shell:git-commit-build:<%= pkg.version %>'
+  ]);
 
-  grunt.registerTask('production', '...', ['build', 'shell:git-commit-build:<%= pkg.version %>','shell:git-branch:deploy' , 'shell:heroku' ]);
+  grunt.registerTask('production', '...', ['build',
+    'shell:git-commit-build:<%= pkg.version %>', 'shell:git-branch:deploy',
+    'shell:heroku'
+  ]);
 
   grunt.registerTask('default', ['web']);
 };
