@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+  require('time-grunt')(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       },
       files: ['**/*.js', '!node_modules/**', '!dist/**',
-        '!public/**'
+        '!public/**', '!swagger/**'
       ]
     },
 
@@ -99,9 +101,6 @@ module.exports = function(grunt) {
         tasks: [{
           grunt: true,
           args: ['watch:web']
-        }, {
-          grunt: true,
-          args: ['watch:jade']
         }]
       }
     },
@@ -126,21 +125,7 @@ module.exports = function(grunt) {
           return 'git commit -am"' + commitMessage + '"';
         }
       }
-    },
-
-    yuidoc: {
-    compile: {
-      name: '<%= pkg.name %>',
-      description: '<%= pkg.description %>',
-      version: '<%= pkg.version %>',
-      url: '<%= pkg.homepage %>',
-      options: {
-        paths: ['app/', 'config/'],
-        //themedir: 'path/to/custom/theme/',
-        outdir: 'public/docs/yui/'
-      }
     }
-  },
 
   });
 
@@ -153,7 +138,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-parallel');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   grunt.registerTask('web', 'Launch webserver and watch tasks', [
     'parallel:web'
