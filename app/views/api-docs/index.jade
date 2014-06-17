@@ -1,0 +1,14 @@
+extends ../layout
+
+block js
+  include ../includes/swagger-scripts
+
+block css
+  include ../includes/swagger-styles
+  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap.css')
+  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap-theme.css')
+
+block content
+  #message-bar.swagger-ui-wrap
+    |&nbsp;
+  #swagger-ui-container.swagger-ui-wrap
