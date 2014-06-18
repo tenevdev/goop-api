@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 // Require login
 exports.requiresLogin = function(req, res, next) {
-  if (req.isAuthenticated() || req.user || req.body.author) return next();
+  if (req.isAuthenticated() || req.body.user || req.user) return next();
   if (req.method === 'GET') req.session.returnTo = req.originalUrl;
   res.json(302, {
     message: 'Login required.'
@@ -33,13 +33,9 @@ exports.user = {
 // Authorize user to modify owned classes
 exports.class = {
   isAuthorized: function(req, res, next) {
-    User.findOne({
-      email: req.body.email
-    }, 'id', function(err, user) {
-      if (req.class.author.id === user.id) return next();
-      res.json(401, {
-        message: 'User not authorized to modify this class'
-      });
+    if (req.class.author.id === req.user.id) return next();
+    res.json(401, {
+      message: 'User not authorized to modify this class'
     });
   }
 };

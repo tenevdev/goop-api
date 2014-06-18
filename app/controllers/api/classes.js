@@ -111,9 +111,11 @@ exports.load = function(req, res, next, id) {
  * @param {Object} res - Express response
  */
 exports.post = function(req, res) {
+  var classObj = req.body.class;
   var classDoc = new Class(req.body.class);
-  if (req.user)
-    classDoc.author = req.body.user.id;
+
+  // req.user comes from passport authentication
+  classDoc.author = req.user.id;
 
   classDoc.save(function(err, data) {
     if (err) {

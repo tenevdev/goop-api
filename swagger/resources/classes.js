@@ -123,23 +123,23 @@ exports.post = {
     method: 'POST',
     parameters: [
       param.body('class', 'Class object that needs to be added', 'Class'),
-      param.body('author',
-        'Author ID if not present in class object declaration', 'string'),
+      param.body('user', 'User object with required email and password properties',
+        'User'),
     ],
-    responseMessages: [swe.invalid('name'), swe.invalid('author')],
+    responseMessages: [swe.invalid('name'), swe.invalid('user')],
     nickname: 'post'
   },
   'action': function(req, res) {
-    var classObj = req.body.class || req.body;
-    if (req.body.author)
-      classObj.author = author;
+    var classObj = req.body.class;
+    if (req.body.user)
+      classObj.author = dataProvider.users.getByEmail(req.body.user);
 
     if (!classObj || !classObj.name) {
       throw swe.invalid('name');
     } else if (!classObj.author) {
-      throw swe.invalid('author');
+      throw swe.invalid('user');
     } else {
-      dataProvider.classes.post(body);
+      dataProvider.classes.post(classObj);
       res.send(200);
     }
   }

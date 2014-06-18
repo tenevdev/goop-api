@@ -30,10 +30,10 @@ var classSchema = new Schema({
     type: String,
     select: true
   },
-  inherits: [{
+  inherits: {
     type: Schema.Types.ObjectId,
     ref: 'Class'
-  }],
+  },
   properties: [String],
   methods: [methodSchema]
 });
