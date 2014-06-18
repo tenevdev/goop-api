@@ -1,4 +1,5 @@
 $(function() {
+  $('body').addClass('swagger-section');
   window.swaggerUi = new SwaggerUi({
     url: "http://localhost:3000/api/v0",
     dom_id: "swagger-ui-container",

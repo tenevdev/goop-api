@@ -60,7 +60,7 @@ module.exports = function(app) {
   swagger.configureSwaggerPaths('', '/api/v0', '');
   swagger.configure('http://localhost:3000', '0.0.1');
 
-  var docs_handler = express.static(__dirname + '/../public/components/swagger-ui/');
+  var docs_handler = express.static(__dirname + '/../public/components/swagger-ui/dist');
   app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
     if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
       res.writeHead(302, {

@@ -61,7 +61,7 @@ module.exports = function(grunt) {
 
     watch: {
       web: {
-        files: ['**/*.js', '!Gruntfile.js', '!node_modules/**', '!dist/**',
+        files: ['**/*.js', '**/*.jade', '**/*.css', '!Gruntfile.js', '!node_modules/**', '!dist/**',
           '!public/**'
         ],
         tasks: ['scripts', 'express:web'],

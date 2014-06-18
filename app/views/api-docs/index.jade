@@ -5,10 +5,9 @@ block js
 
 block css
   include ../includes/swagger-styles
-  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap.css')
-  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap-theme.css')
+  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap.min.css')
+  link(rel='stylesheet', href='../components/bootstrap/dist/css/bootstrap-theme.min.css')
 
 block content
-  #message-bar.swagger-ui-wrap
-    |&nbsp;
-  #swagger-ui-container.swagger-ui-wrap
+  .jumbotron
+    #swagger-ui-container.swagger-ui-wrap
