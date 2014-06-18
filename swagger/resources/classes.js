@@ -132,7 +132,7 @@ exports.post = {
   'action': function(req, res) {
     var classObj = req.body.class;
     if (req.body.user)
-      classObj.author = dataProvider.users.getByEmail(req.body.user);
+      classObj.author = dataProvider.users.getByEmail(req.body.user).id;
 
     if (!classObj || !classObj.name) {
       throw swe.invalid('name');
