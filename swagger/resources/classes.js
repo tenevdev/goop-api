@@ -22,7 +22,7 @@ exports.getById = {
   },
   action: function(req, res) {
     if (!req.params.classId) {
-      throw swe.invalid('classId');
+      throw swe.invalid('classId', res);
     }
     var id = parseInt(req.params.classId);
     var classObj = dataProvider.classes.getById(id);
@@ -127,7 +127,7 @@ exports.post = {
         'User object with required email and password properties',
         'User'),
     ],
-    responseMessages: [swe.invalid('name'), swe.invalid('user')],
+    responseMessages: [swe.invalid('class.name'), swe.invalid('user')],
     nickname: 'post'
   },
   'action': function(req, res) {
@@ -136,9 +136,9 @@ exports.post = {
       classObj.author = dataProvider.users.getByEmail(req.body.user).id;
 
     if (!classObj || !classObj.name) {
-      throw swe.invalid('name');
+      throw swe.invalid('class.name', res);
     } else if (!classObj.author) {
-      throw swe.invalid('user');
+      throw swe.invalid('user', res);
     } else {
       dataProvider.classes.post(classObj);
       res.send(200);
@@ -158,20 +158,26 @@ exports.update = {
         'User object with email and password properties that is the owner of this class',
         'User'),
     ],
-    responseMessages: [swe.invalid('classId'), swe.invalid('class')],
-  nickname: 'update'
-},
-action: function(req, res) {
-  var user = dataProvider.users.getByEmail(req.body.user);
-  if (!req.body.class.name) {
-    throw swe.invalid('class');
-  } else if (user && user.id === req.class.author) {
-    dataProvider.classes.update(req.body.class);
-    res.send(200);
-  } else {
-    res.send(400);
+    responseMessages: [swe.invalid('classId'), swe.notFound('class'), swe.invalid(
+      'class')],
+    nickname: 'update'
+  },
+  action: function(req, res) {
+    if (req.params.classId) {
+      var user = dataProvider.users.getByEmail(req.body.user);
+      if (!req.body.class.name) {
+        throw swe.invalid('class', res);
+      } else if (user && user.id === req.class.author) {
+        req.body.class.id = req.params.classId;
+        if (dataProvider.classes.update(req.body.class))
+          res.send(200);
+        else
+          throw swe.notFound('class', res);
+      }
+    } else {
+      throw swe.invalid('classId', res);
+    }
   }
-}
 };
 
 exports.delete = {
@@ -186,8 +192,14 @@ exports.delete = {
     nickname: 'delete'
   },
   'action': function(req, res) {
-    var id = parseInt(req.params.classId);
-    dataProvider.classes.deleteById(id);
-    res.send(204);
+    if (req.params.classId) {
+      var id = parseInt(req.params.classId);
+      if (dataProvider.classes.deleteById(id))
+        res.send(204);
+      else
+        throw swe.notFound('class', res);
+    } else {
+      throw swe.invalid('classId', res)
+    }
   }
 };

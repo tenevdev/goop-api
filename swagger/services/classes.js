@@ -21,5 +21,9 @@ function deleteClassById(id) {
 }
 
 function updateClass(updatedClass) {
-  data.classes[updatedClass.id] = updatedClass;
+  if (data.classes[updatedClass.id]) {
+    data.classes[updatedClass.id] = updatedClass;
+    return updatedClass;
+  }
+  return null;
 }
