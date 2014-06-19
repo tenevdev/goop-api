@@ -123,7 +123,8 @@ exports.post = {
     method: 'POST',
     parameters: [
       param.body('class', 'Class object that needs to be added', 'Class'),
-      param.body('user', 'User object with required email and password properties',
+      param.body('user',
+        'User object with required email and password properties',
         'User'),
     ],
     responseMessages: [swe.invalid('name'), swe.invalid('user')],
@@ -153,21 +154,24 @@ exports.update = {
     summary: 'Update an existing class',
     parameters: [
       param.body('class', 'Class object that needs to be updated', 'Class'),
-      param.body('user', 'User object that is the owner of this class', 'User'),
+      param.body('user',
+        'User object with email and password properties that is the owner of this class',
+        'User'),
     ],
-    responseMessages: [swe.invalid('classId'), swe.notFound('class'), swe.invalid(
-      'input')],
-    nickname: 'update'
-  },
-  action: function(req, res) {
-    var body = req.body;
-    if (!body || !body.name) {
-      throw swe.invalid('class');
-    } else {
-      dataProvider.classes.update(body);
-      res.send(200);
-    }
+    responseMessages: [swe.invalid('classId'), swe.invalid('class')],
+  nickname: 'update'
+},
+action: function(req, res) {
+  var user = dataProvider.users.getByEmail(req.body.user);
+  if (!req.body.class.name) {
+    throw swe.invalid('class');
+  } else if (user && user.id === req.class.author) {
+    dataProvider.classes.update(req.body.class);
+    res.send(200);
+  } else {
+    res.send(400);
   }
+}
 };
 
 exports.delete = {

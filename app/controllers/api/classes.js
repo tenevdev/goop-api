@@ -81,8 +81,6 @@ exports.getById = function(req, res, next) {
  * @param {String} id - Class id
  */
 exports.load = function(req, res, next, id) {
-  //var User = mongoose.model('User');
-
   // Data is populated with author.name and inherits.name
   Class.getById(id, function(err, data) {
     if (err) {
