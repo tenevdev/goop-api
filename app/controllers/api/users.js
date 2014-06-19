@@ -162,15 +162,17 @@ exports.getClasses = function(req, res, next) {
 exports.post = function(req, res, next) {
   var userDoc = new User(req.body.user);
 
-  userDoc.save(function(err, data) {
+  userDoc.save(function(err, user) {
     if (err) {
       res.json(500, err);
       next(err);
     } else {
-      // Set location header
-      res.location('user/' + data.id);
-      // Send HTTP 201 Created
-      res.json(201, data);
+      User.findById(user.id, '-hashed_password -salt -__v', function(err, doc) {
+        // Set location header
+        res.location('user/' + doc.id);
+        // Send HTTP 201 Created
+        res.json(201, doc);
+      })
     }
   });
 };

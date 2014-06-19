@@ -3,7 +3,7 @@ var sw = require('swagger-node-express'),
   url = require('url'),
   swe = sw.errors;
 
-var dataProvider = require('../services').users;
+var dataProvider = require('../services');
 
 exports.getById = {
   spec: {
@@ -21,10 +21,10 @@ exports.getById = {
   },
   action: function(req, res) {
     if (!req.params.userId) {
-      throw swe.invalid('userId');
+      throw swe.invalid('userId', res);
     }
     var id = parseInt(req.params.userId);
-    var user = dataProvider.getById(id);
+    var user = dataProvider.users.getById(id);
 
     if (user) res.send(JSON.stringify(user));
     else throw swe.notFound('user', res);
@@ -60,35 +60,36 @@ exports.getById = {
 //   }
 // };
 
-// exports.post = {
-//   'spec': {
-//     path: '/classes',
-//     notes: 'adds a class to the store',
-//     summary: 'Add a new class',
-//     method: 'POST',
-//     parameters: [
-//       param.body('class', 'Class object that needs to be added', 'Class'),
-//       param.body('author',
-//         'Author ID if not present in class object declaration', 'string'),
-//     ],
-//     responseMessages: [swe.invalid('name'), swe.invalid('author')],
-//     nickname: 'post'
-//   },
-//   'action': function(req, res) {
-//     var classObj = req.body.class || req.body;
-//     if (req.body.author)
-//       classObj.author = author;
-
-//     if (!classObj || !classObj.name) {
-//       throw swe.invalid('name');
-//     } else if (!classObj.author) {
-//       throw swe.invalid('author');
-//     } else {
-//       dataProvider.post(body);
-//       res.send(200);
-//     }
-//   }
-// };
+exports.post = {
+  spec: {
+    path: '/users',
+    notes: 'adds a user',
+    summary: 'Add a new user',
+    method: 'POST',
+    parameters: [
+      param.body('user',
+        'User object with email and password required properties that needs to be added',
+        'User')
+    ],
+    responseMessages: [swe.invalid('email'), swe.invalid('user')],
+    nickname: 'post'
+  },
+  action: function(req, res) {
+    if (req.body.user) {
+      var userObj = req.body.user;
+      if (dataProvider.users.getByEmail(userObj))
+        throw swe.invalid('email');
+      else if (userObj && userObj.password) {
+        dataProvider.users.post(userObj);
+        res.send(201);
+      } else {
+        throw swe.invalid('user', res);
+      }
+    } else {
+      throw swe.invalid('user', res);
+    }
+  }
+};
 
 // exports.update = {
 //   spec: {

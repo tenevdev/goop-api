@@ -6,7 +6,7 @@ exports.getById = function(id){
 
 exports.getByEmail = function(user){
 	for(var id in data.users){
-		if(data.users[id].email === user.email && data.users[id].password === user.password)
+		if(data.users[id].email === user.email)
 			return data.users[id];
 	}
 	return null;
