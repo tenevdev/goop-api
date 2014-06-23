@@ -1,5 +1,5 @@
 var sw = require('swagger-node-express'),
-  param = require('../../node_modules/swagger-node-express/lib/paramTypes.js'),
+  param = require('../paramTypes.js'),
   url = require('url'),
   swe = sw.errors;
 
