@@ -1,11 +1,6 @@
 {
   "name": "goop",
   "version": "0.0.1",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "./public/components"
-  ],
   "dependencies": {
     "bootstrap": "~3.1.1",
     "swagger-ui": "~2.0.17"
