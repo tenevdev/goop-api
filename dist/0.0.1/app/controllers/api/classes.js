@@ -81,8 +81,6 @@ exports.getById = function(req, res, next) {
  * @param {String} id - Class id
  */
 exports.load = function(req, res, next, id) {
-  //var User = mongoose.model('User');
-
   // Data is populated with author.name and inherits.name
   Class.getById(id, function(err, data) {
     if (err) {
@@ -111,9 +109,11 @@ exports.load = function(req, res, next, id) {
  * @param {Object} res - Express response
  */
 exports.post = function(req, res) {
+  var classObj = req.body.class;
   var classDoc = new Class(req.body.class);
-  if (req.user)
-    classDoc.author = req.body.user.id;
+
+  // req.user comes from passport authentication
+  classDoc.author = req.user.id;
 
   classDoc.save(function(err, data) {
     if (err) {

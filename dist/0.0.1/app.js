@@ -49,6 +49,9 @@ require('./config/express')(app, config, passport);
 require('./config/routes/web')(app);
 require('./config/routes/api')(app, passport);
 
+//Configure swagger
+require('./config/swagger')(app);
+
 // Handle not found on application level (maybe should go inside routes)
 app.use(function(req, res) {
   res.status(404).render('404', {

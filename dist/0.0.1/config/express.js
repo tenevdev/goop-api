@@ -26,7 +26,7 @@ module.exports = function(app, config, passport) {
 
   app.use(favicon(config.root + '/public/img/favicon.ico'));
 
-  //app.use(morgan('dev'));
+  app.use(morgan('dev'));
 
   app.use(bodyParser());
   app.use(methodOverride());

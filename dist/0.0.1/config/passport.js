@@ -8,8 +8,8 @@ module.exports = function(passport, config) {
 
   // Local strategy is handled by the server
   passport.use(new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'password'
+      usernameField: 'user[email]',
+      passwordField: 'user[password]'
     },
     function(email, password, done) {
       User.findOne({

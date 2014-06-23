@@ -31,9 +31,11 @@ module.exports = function(app, passport) {
   router.param('classId', classes.load);
 
   router.route('/classes')
-  .get(classes.getAll)
-  .post(authorize.requiresLogin, classes.post)
-  .delete(authorize.user.isAuthorizedAdministrator, classes.deleteAll);
+    .get(classes.getAll)
+    .post(authorize.requiresLogin, passport.authenticate('local', {
+      session: false
+    }), classes.post)
+    .delete(authorize.user.isAuthorizedAdministrator, classes.deleteAll);
 
   router.route('/classes/:classId')
     .get(classes.getById)
