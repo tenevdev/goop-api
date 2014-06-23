@@ -16,7 +16,7 @@ exports.getById = {
     nickname: 'getById',
     produces: ['application/json'],
     parameters: [param.path('userId', 'ID of user that needs to be fetched',
-      'string')],
+      'number')],
     responseMessages: [swe.invalid('userId'), swe.notFound('user')]
   },
   action: function(req, res) {
@@ -30,35 +30,6 @@ exports.getById = {
     else throw swe.notFound('user', res);
   }
 };
-
-// exports.getAll = {
-//   'spec': {
-//     description: 'Operations about classes',
-//     path: '/classes',
-//     method: 'GET',
-//     summary: 'Get all classes',
-//     notes: 'Returns all classes',
-//     type: 'Class',
-//     nickname: 'getAll',
-//     produces: ['application/json'],
-//     parameters: [
-//       param.query('limit', 'The maximum number of classes to take', 'number',
-//         false, null, 10),
-//       param.query('offset', 'The number of classes to skip', 'number',
-//         false, null, 0),
-//       param.query('name', 'Filter classes by name', 'string',
-//         false),
-//       param.query('author', 'Filter classes by author ID', 'string',
-//         false),
-//       param.query('inherits', 'Filter classes by parent ID', 'string',
-//         false)
-//     ]
-//   },
-//   'action': function(req, res) {
-//     var classes = dataProvider.getAll();
-//     res.send(JSON.stringify(classes));
-//   }
-// };
 
 exports.post = {
   spec: {
@@ -91,45 +62,109 @@ exports.post = {
   }
 };
 
-// exports.update = {
-//   spec: {
-//     path: '/classes/{classId}',
-//     notes: 'updates a class in the store',
-//     method: 'PUT',
-//     summary: 'Update an existing class',
-//     parameters: [
-//       param.body('class', 'Class object that needs to be updated', 'Class'),
-//       param.body('user', 'User object that is the owner of this class', 'User'),
-//     ],
-//     responseMessages: [swe.invalid('classId'), swe.notFound('class'), swe.invalid(
-//       'input')],
-//     nickname: 'update'
-//   },
-//   action: function(req, res) {
-//     var body = req.body;
-//     if (!body || !body.name) {
-//       throw swe.invalid('class');
-//     } else {
-//       dataProvider.update(body);
-//       res.send(200);
-//     }
-//   }
-// };
+exports.update = {
+  spec: {
+    path: '/users/{userId}',
+    notes: 'updates a user',
+    method: 'PUT',
+    summary: 'Update an existing user',
+    parameters: [
+      param.path('userId', 'ID of user that needs to be updated', 'number'),
+      param.body('user', 'User object to be updated', 'User'),
+    ],
+    responseMessages: [swe.invalid('userId'), swe.notFound('user'), swe.invalid(
+      'user')],
+    nickname: 'update'
+  },
+  action: function(req, res) {
+    if (req.body.user && req.params.userId) {
+      var user = req.body.user;
+      user.id = parseInt(req.params.userId, 10);
+      if (dataProvider.users.update(user))
+        res.send(200);
+      else {
+        throw swe.notFound('user', res);
+      }
+    } else if (req.params.userId) {
 
-// exports.delete = {
-//   'spec': {
-//     path: '/classes/{classId}',
-//     notes: 'removes a class from the store',
-//     method: 'DELETE',
-//     summary: 'Remove an existing class',
-//     parameters: [param.path('classId', 'ID of class that needs to be removed',
-//       'string')],
-//     responseMessages: [swe.invalid('classId'), swe.notFound('class')],
-//     nickname: 'delete'
-//   },
-//   'action': function(req, res) {
-//     var id = parseInt(req.params.classId);
-//     dataProvider.deleteById(id);
-//     res.send(204);
-//   }
-// };
+      throw swe.invalid('user', res);
+    } else {
+      throw swe.invalid('userId', res);
+    }
+  }
+};
+
+exports.delete = {
+  spec: {
+    path: '/users/{userId}',
+    notes: 'removes a user',
+    method: 'DELETE',
+    summary: 'Remove an existing user',
+    parameters: [param.path('userId', 'ID of user that needs to be removed',
+      'number')],
+    responseMessages: [swe.invalid('userId'), swe.notFound('user')],
+    nickname: 'delete'
+  },
+  action: function(req, res) {
+    if (req.params.userId) {
+      var id = parseInt(req.params.classId, 10);
+      if (dataProvider.users.delete(id))
+        res.send(204);
+      else
+        throw swe.notFound('user');
+    } else {
+      throw swe.invalid('userId', res);
+    }
+  }
+};
+
+exports.deleteClasses = {
+  spec: {
+    path: '/users/{userId}/classes',
+    notes: 'removes all classes for a user',
+    method: 'DELETE',
+    summary: 'Remove all classes for an existing user',
+    parameters: [param.path('userId',
+      'ID of user whose classes should be removed',
+      'number')],
+    responseMessages: [swe.invalid('userId'), swe.notFound('user')],
+    nickname: 'deleteClasses'
+  },
+  action: function(req, res) {
+    if (req.params.userId) {
+      var id = parseInt(req.params.classId, 10);
+      if (dataProvider.users.deleteClasses(id))
+        res.send(204);
+      else
+        throw swe.notFound('user');
+    } else {
+      throw swe.invalid('userId', res);
+    }
+  }
+};
+
+exports.getClasses = {
+  spec: {
+    path: '/users/{userId}/classes',
+    notes: 'alternative for /classes?author=userId',
+    method: 'GET',
+    summary: 'Return all classes for an existing user',
+    parameters: [param.path('userId',
+      'ID of user whose classes should be fetched',
+      'number')],
+    responseMessages: [swe.invalid('userId'), swe.notFound('user')],
+    nickname: 'getClasses'
+  },
+  action: function(req, res) {
+    if (req.params.userId) {
+      var id = parseInt(req.params.classId, 10);
+      var classes = dataProvider.users.getClasses(id);
+      if (classes)
+        res.send(JSON.stringify(classes));
+      else
+        throw swe.notFound('user');
+    } else {
+      throw swe.invalid('userId', res);
+    }
+  }
+};

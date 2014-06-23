@@ -31,7 +31,11 @@ module.exports = function(app) {
     .addPut(resources.classes.update)
     .addDelete(resources.classes.delete)
     .addGet(resources.users.getById)
-    .addPost(resources.users.post);
+    .addGet(resources.users.getClasses)
+    .addPost(resources.users.post)
+    .addPut(resources.users.update)
+    .addDelete(resources.users.delete)
+    .addDelete(resources.users.deleteClasses);
 
   swagger.configureDeclaration('classes', {
     description: 'Operations about classes',

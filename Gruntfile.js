@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 
     copy: {
       dist: {
-        src: ['public/**', 'app/**', 'config/**', 'app.js', '*.json',
+        src: ['public/**', 'app/**', 'config/**', 'swagger/**', 'app.js', '*.json',
           'Procfile'
         ],
         dest: 'dist/<%= pkg.version %>',

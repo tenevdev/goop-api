@@ -17,7 +17,7 @@ exports.getById = {
     nickname: 'getById',
     produces: ['application/json'],
     parameters: [param.path('classId', 'ID of class that needs to be fetched',
-      'string')],
+      'number')],
     responseMessages: [swe.invalid('classId'), swe.notFound('class')]
   },
   action: function(req, res) {
@@ -153,6 +153,7 @@ exports.update = {
     method: 'PUT',
     summary: 'Update an existing class',
     parameters: [
+      param.path('classId', 'ID of class that needs to be updated', 'number'),
       param.body('class', 'Class object that needs to be updated', 'Class'),
       param.body('user',
         'User object with email and password properties that is the owner of this class',
@@ -187,7 +188,7 @@ exports.delete = {
     method: 'DELETE',
     summary: 'Remove an existing class',
     parameters: [param.path('classId', 'ID of class that needs to be removed',
-      'string')],
+      'number')],
     responseMessages: [swe.invalid('classId'), swe.notFound('class')],
     nickname: 'delete'
   },
