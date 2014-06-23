@@ -1,7 +1,7 @@
 $(function() {
   $('body').addClass('swagger-section');
   window.swaggerUi = new SwaggerUi({
-    url: "http://localhost:3000/api/v0",
+    url: "http://localhost:5000/api/v0",
     dom_id: "swagger-ui-container",
     supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
     onComplete: function(swaggerApi, swaggerUi) {

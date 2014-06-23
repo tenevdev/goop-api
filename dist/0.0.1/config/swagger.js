@@ -4,21 +4,21 @@ var swagger = require('swagger-node-express'),
 
 module.exports = function(app) {
 
-  var corsOptions = {
-    credentials: true,
-    origin: function(origin, callback) {
-      if (origin === undefined) {
-        callback(null, false);
-      } else {
-        // change wordnik.com to your allowed domain.
-        var match = origin.match('/^(.*)?localhost(:[0-9]+)?/');
-        var allowed = (match !== null && match.length > 0);
-        callback(null, allowed);
-      }
-    }
-  };
+  // var corsOptions = {
+  //   credentials: true,
+  //   origin: function(origin, callback) {
+  //     if (origin === undefined) {
+  //       callback(null, false);
+  //     } else {
+  //       // change wordnik.com to your allowed domain.
+  //       var match = origin.match('/^(.*)?localhost(:[0-9]+)?/');
+  //       var allowed = (match !== null && match.length > 0);
+  //       callback(null, allowed);
+  //     }
+  //   }
+  // };
 
-  app.use(cors(corsOptions));
+  app.use(cors());
 
   swagger.setAppHandler(app);
   var models = require('../swagger/models'),
@@ -63,7 +63,7 @@ module.exports = function(app) {
 
   // Configures the app's base path and api version.
   swagger.configureSwaggerPaths('', '/api/v0', '');
-  swagger.configure('http://localhost:3000', '0.0.1');
+  swagger.configure('http://goop.herokuapp.com', '0.0.1');
 
   var docs_handler = express.static(__dirname + '/../public/components/swagger-ui/dist');
   app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
