@@ -1,24 +1,7 @@
 var swagger = require('swagger-node-express'),
-  cors = require('cors'),
   express = require('express');
 
-module.exports = function(app) {
-
-  // var corsOptions = {
-  //   credentials: true,
-  //   origin: function(origin, callback) {
-  //     if (origin === undefined) {
-  //       callback(null, false);
-  //     } else {
-  //       // change wordnik.com to your allowed domain.
-  //       var match = origin.match('/^(.*)?localhost(:[0-9]+)?/');
-  //       var allowed = (match !== null && match.length > 0);
-  //       callback(null, allowed);
-  //     }
-  //   }
-  // };
-
-  app.use(cors());
+module.exports = function(app, config) {
 
   swagger.setAppHandler(app);
   var models = require('../swagger/models'),
@@ -61,11 +44,17 @@ module.exports = function(app) {
     license: 'MIT'
   });
 
+  var url = 'http://goop.herokuapp.com';
+  if (config.port === 3000 || config.port === 5000)
+    url = 'http://localhost:' + config.port;
+
+
   // Configures the app's base path and api version.
   swagger.configureSwaggerPaths('', '/api/v0', '');
-  swagger.configure('http://goop.herokuapp.com', '0.0.1');
+  swagger.configure(url, '0.0.1');
 
-  var docs_handler = express.static(__dirname + '/../public/components/swagger-ui/dist');
+  var docs_handler = express.static(config.root +
+    '/public/components/swagger-ui/dist');
   app.get(/^\/docs(\/.*)?$/, function(req, res, next) {
     if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
       res.writeHead(302, {

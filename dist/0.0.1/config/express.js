@@ -4,10 +4,13 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   methodOverride = require('method-override'),
   favicon = require('serve-favicon'),
+  cors = require('cors'),
   // flash = require('connect-flash'),
   env = process.env.NODE_ENV || 'development';
 
 module.exports = function(app, config, passport) {
+
+  app.use(cors());
 
   app.set('showStackError', true);
 

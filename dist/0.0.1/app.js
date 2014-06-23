@@ -50,7 +50,7 @@ require('./config/routes/web')(app);
 require('./config/routes/api')(app, passport);
 
 //Configure swagger
-require('./config/swagger')(app);
+require('./config/swagger')(app, config);
 
 // Handle not found on application level (maybe should go inside routes)
 app.use(function(req, res) {
