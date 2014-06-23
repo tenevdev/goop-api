@@ -27,7 +27,6 @@ var config = {
     app: {
       name: 'goop'
     },
-    port: 3000,
     db: productionDbPath
   }
 };
