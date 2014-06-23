@@ -1,3 +1,3 @@
 {
-	"directory": ["./public/components", "./dist/0.0.1/public/components"]
+	"directory": "./dist/0.0.1/public/components"
 }
