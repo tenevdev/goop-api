@@ -26,8 +26,8 @@ module.exports = function(app, config, passport) {
 
   app.use(favicon(config.root + '/public/img/favicon.ico'));
 
-  if(env == 'development')
-    app.use(morgan('dev'));
+  //if(env == 'development')
+    //app.use(morgan('dev'));
 
   app.use(bodyParser());
   app.use(methodOverride());
